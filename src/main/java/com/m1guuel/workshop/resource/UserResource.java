@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.m1guuel.workshop.Repository.UserRepository;
 import com.m1guuel.workshop.domain.User;
+import com.m1guuel.workshop.dto.UserDTO;
 import com.m1guuel.workshop.services.UserService;
 
 @RestController
@@ -25,8 +26,9 @@ public class UserResource {
 	UserService service;
 
 	@GetMapping
-	public ResponseEntity<List<User>> findAll() {
+	public ResponseEntity<List<UserDTO>> findAll() {
 		List<User> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		List<UserDTO> listDTO = list.stream().map(X -> new UserDTO(X)).collect(Collectors.toList());	
+		return ResponseEntity.ok().body(listDTO);
 	}
 }
