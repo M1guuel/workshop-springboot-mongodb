@@ -5,19 +5,21 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 @Document(collection = "user")
 public class User implements Serializable {
 	@Id
 	private String id;
 	private String nome;
 	private String email;
+	private Post post;
 
 	public User() {
 
 	}
 
 	public User(String id, String nome, String email) {
-	
+
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
