@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.m1guuel.workshop.Repository.UserRepository;
+import com.m1guuel.workshop.domain.Post;
 import com.m1guuel.workshop.domain.User;
 import com.m1guuel.workshop.dto.UserDTO;
 import com.m1guuel.workshop.services.UserService;
@@ -45,7 +46,11 @@ public class UserResource {
 		User list = service.findById(id);
 		return ResponseEntity.ok().body(new UserDTO(list));
 	}
-	
+	@GetMapping("/{id}/posts")
+	public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+		User list = service.findById(id);
+		return ResponseEntity.ok().body(list.getPosts());
+	}
 	
 	
 	@DeleteMapping("/{id}")
