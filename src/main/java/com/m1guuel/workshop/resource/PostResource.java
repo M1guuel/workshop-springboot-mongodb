@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,12 +22,14 @@ import com.m1guuel.workshop.Repository.UserRepository;
 import com.m1guuel.workshop.domain.Post;
 import com.m1guuel.workshop.domain.User;
 import com.m1guuel.workshop.dto.UserDTO;
+import com.m1guuel.workshop.resource.util.URL;
 import com.m1guuel.workshop.services.PostService;
 import com.m1guuel.workshop.services.UserService;
 
 @RestController
 @RequestMapping(value = "/post")
 public class PostResource {
+	
 	@Autowired
 	private PostService service;
 
@@ -36,10 +39,19 @@ public class PostResource {
 		return ResponseEntity.ok().body(list);
 	}
 
+	@GetMapping("/titlesearch")
+	public ResponseEntity<List<Post>> findBytitle(@RequestParam(value = "text",defaultValue = "")String text) {
+		text = URL.decoParam(text);
+		List<Post> list = service.findByTitle(text);
+		return ResponseEntity.ok().body(list);
+	}
 	@GetMapping("/{id}")
 	public ResponseEntity<Post> findById(@PathVariable String id) {
 	Post list = service.findById(id);
 		return ResponseEntity.ok().body(list);
 	}
+
+
+	
 
 }
