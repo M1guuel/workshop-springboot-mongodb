@@ -1,5 +1,6 @@
 package com.m1guuel.workshop.resource;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ import com.m1guuel.workshop.services.UserService;
 @RestController
 @RequestMapping(value = "/post")
 public class PostResource {
-	
+
 	@Autowired
 	private PostService service;
 
@@ -40,18 +41,28 @@ public class PostResource {
 	}
 
 	@GetMapping("/titlesearch")
-	public ResponseEntity<List<Post>> findBytitle(@RequestParam(value = "text",defaultValue = "")String text) {
+	public ResponseEntity<List<Post>> findBytitle(@RequestParam(value = "text", defaultValue = "") String text) {
 		text = URL.decoParam(text);
 		List<Post> list = service.findByTitle(text);
 		return ResponseEntity.ok().body(list);
 	}
-	@GetMapping("/{id}")
-	public ResponseEntity<Post> findById(@PathVariable String id) {
-	Post list = service.findById(id);
+
+	@GetMapping("/fullsearch")
+	public ResponseEntity<List<Post>> fullSearch(
+			@RequestParam(value = "text",defaultValue = "")String text,
+			@RequestParam(value = "minDate",defaultValue = "")String minDate,
+		    @RequestParam(value = "maxDate",defaultValue = "")String maxDate) {
+		text = URL.decoParam(text);
+		Date min = URL.convertDate(minDate, new Date(0L));
+		Date max = URL.convertDate(maxDate, new Date(0));
+		List<Post> list = service.fullSearch(text, min, max);
 		return ResponseEntity.ok().body(list);
 	}
 
-
-	
+	@GetMapping("/{id}")
+	public ResponseEntity<Post> findById(@PathVariable String id) {
+		Post list = service.findById(id);
+		return ResponseEntity.ok().body(list);
+	}
 
 }
